@@ -1,0 +1,9 @@
+*.pyc
+*.tags
+
+# SQLite database
+*.sqlite3
+
+# Django media & collected static
+**/static
+**/media
