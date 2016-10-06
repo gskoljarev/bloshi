@@ -9,6 +9,30 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
+
+import os
+import sys
+from os.path import join, abspath, dirname
+
+import django
+
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+BASE_DIR = dirname(dirname(abspath(__file__)))
+
+here = lambda *x: join(abspath(dirname(__file__)), *x)
+PROJECT_ROOT = here("..",)
+root = lambda *x: join(abspath(PROJECT_ROOT), *x)
+
+
+# Add absolute path to Django project root directory
+
+sys.path.append(os.path.join(PROJECT_ROOT, 'bloshi'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'bloshi.settings'
+django.setup()
+
+
 BOT_NAME = 'scraper'
 
 SPIDER_MODULES = ['scraper.spiders']
