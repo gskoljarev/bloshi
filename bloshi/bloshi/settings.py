@@ -27,7 +27,7 @@ root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2$!v@t*@_qdtykf4yr3cd^9+8=dg2jz7#jibyk^ky+9xs%22vl'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
