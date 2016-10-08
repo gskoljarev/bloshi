@@ -65,7 +65,7 @@ class Shop(models.Model):
 
 @python_2_unicode_compatible
 class ShopCategory(MPTTModel):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(_('Name'), max_length=50, blank=True)
     code = models.CharField(_('Code'), max_length=7, blank=True)
