@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext as _
 
-from shops.models import Shop
+from shops.models import Shop, ShopCategory
 
 
 @python_2_unicode_compatible
@@ -59,3 +59,24 @@ class Spider(models.Model):
         db_table = 'spiders'
         verbose_name = 'Spider'
         verbose_name_plural = 'Spiders'
+
+
+@python_2_unicode_compatible
+class TemporaryItem(models.Model):
+    shop_category = models.ForeignKey(ShopCategory, on_delete=models.CASCADE)
+    shop_availability = models.CharField(_('Shop availibility'), max_length=255, blank=True)
+    shop_code = models.CharField(_('Shop code'), max_length=20, blank=True)
+    shop_title = models.CharField(_('Shop title'), max_length=255, blank=True)
+    search_title = models.CharField(_('Search title'), max_length=255, blank=True)
+    title = models.CharField(_('Title'), max_length=255, blank=True)
+    shop_url = models.URLField(_('Shop URL'), blank=True)
+    shop_price = models.DecimalField(_('Shop price'), max_digits=7, decimal_places=2, default=0.00)
+    # image = ImageField()
+
+    class Meta:
+        db_table = 'tempitems'
+        verbose_name = 'Temporary item'
+        verbose_name_plural = 'Temporary items'
+
+    def __str__(self):
+        return "%s" % self.shop_title
