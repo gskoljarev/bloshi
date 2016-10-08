@@ -80,3 +80,16 @@ class TemporaryItem(models.Model):
 
     def __str__(self):
         return "%s" % self.shop_title
+
+    @classmethod
+    def create_in_bulk(cls, items):
+        cls.objects.bulk_create(items)
+
+    @classmethod
+    def update_in_bulk(cls, items):
+        from bulk_update.helper import bulk_update
+        bulk_update(
+            items,
+            exclude_fields=['code','shop_category'],
+            batch_size=100
+        )
