@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'mptt',
 
+    'scraping.apps.ScrapingConfig',
     'shops.apps.ShopsConfig',
 ]
 
