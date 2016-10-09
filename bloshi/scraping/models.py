@@ -27,9 +27,9 @@ class Spider(models.Model):
     selector_xpath = models.TextField(_('Selector XPath'), blank=True)
 
     shop_code_type = models.IntegerField(choices=TYPE, default=TYPE.list)
-    shop_code = models.TextField(_('code'), blank=True)
-    shop_code_in = models.TextField(_('code input'), blank=True)
-    shop_code_out = models.TextField(_('code output'), blank=True)
+    shop_code = models.TextField(_('shop_code'), blank=True)
+    shop_code_in = models.TextField(_('shop_code input'), blank=True)
+    shop_code_out = models.TextField(_('shop_code output'), blank=True)
 
     shop_title_type = models.IntegerField(choices=TYPE, default=TYPE.list)
     shop_title = models.TextField(_('shop_title'), blank=True)
@@ -37,14 +37,14 @@ class Spider(models.Model):
     shop_title_out = models.TextField(_('shop_title output'), blank=True)
 
     shop_url_type = models.IntegerField(choices=TYPE, default=TYPE.list)
-    shop_url = models.TextField(_('url'), blank=True)
-    shop_url_in = models.TextField(_('url input'), blank=True)
-    shop_url_out = models.TextField(_('url output'), blank=True)
+    shop_url = models.TextField(_('shop_url'), blank=True)
+    shop_url_in = models.TextField(_('shop_url input'), blank=True)
+    shop_url_out = models.TextField(_('shop_url output'), blank=True)
 
     shop_price_type = models.IntegerField(choices=TYPE, default=TYPE.list)
-    shop_price = models.TextField(_('price'), blank=True)
-    shop_price_in = models.TextField(_('price input'), blank=True)
-    shop_price_out = models.TextField(_('price output'), blank=True)
+    shop_price = models.TextField(_('shop_price'), blank=True)
+    shop_price_in = models.TextField(_('shop_price input'), blank=True)
+    shop_price_out = models.TextField(_('shop_price output'), blank=True)
 
     shop_availability_type = models.IntegerField(choices=TYPE, default=TYPE.list)
     shop_availability = models.TextField(_('shop_availability'), blank=True)
