@@ -6,6 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from scraping.models import TemporaryItem
+from scraping.utils import update_article_data
 
 
 class ScraperPipeline(object):
@@ -19,6 +20,11 @@ class ScraperPipeline(object):
         return item
 
     def close_spider(self, spider):
+        print ">>> ", "Clear existing temporary items in db..."
+        TemporaryItem.objects.all().delete()
         print ">>> ", "Saving temporary items to db..."
         TemporaryItem.create_in_bulk(self.itemset)
-        print ">>> ", "Temporary items saved in db."
+        print ">>> ", "Temporary items saved in db..."
+        print ">>> ", "Saving article data..."
+        update_article_data(spider.shop)
+        print ">>> ", "Article data saved!"

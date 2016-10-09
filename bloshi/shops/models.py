@@ -129,7 +129,7 @@ class Article(models.Model):
         from bulk_update.helper import bulk_update
         bulk_update(
             articles,
-            exclude_fields=['code','shop_category'],
+            exclude_fields=['shop_code','shop_category'],
             batch_size=100
         )
 
