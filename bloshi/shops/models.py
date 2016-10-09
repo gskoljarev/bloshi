@@ -72,7 +72,7 @@ class ShopCategory(MPTTModel):
     url = models.URLField(_('URL'), blank=True)
 
     def __str__(self):
-        return "%s" % self.name
+        return "%s" % self.category
 
     class MPTTMeta:
         order_insertion_by = ['name']
