@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from scraping.models import TemporaryItem
-from scraping.utils import update_article_data
+from analytics.utils import update_article_data
 
 
 class ScraperPipeline(object):
