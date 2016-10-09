@@ -17,6 +17,18 @@ from .models import (
 )
 
 
+class ShopAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'code', 'url']
+
+
+class ShopCategoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'shop', 'category', 'url']
+
+
+class ShopAvailabilityAdmin(admin.ModelAdmin):
+    list_display = ['id', 'shop', 'keyword', 'availability']
+
+
 class ArticleAdmin(admin.ModelAdmin):
     list_display = [
         'id',
@@ -65,7 +77,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(Availability)
-admin.site.register(Shop)
-admin.site.register(ShopCategory)
-admin.site.register(ShopAvailability)
+admin.site.register(Shop, ShopAdmin)
+admin.site.register(ShopCategory, ShopCategoryAdmin)
+admin.site.register(ShopAvailability, ShopAvailabilityAdmin)
 admin.site.register(Article, ArticleAdmin)
