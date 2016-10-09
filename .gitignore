@@ -4,6 +4,9 @@
 # SQLite database
 *.sqlite3
 
+# Local env files
+.env
+
 # Django media & collected static
 **/static
 **/media
