@@ -12,12 +12,13 @@ from scraping.models import Spider
 class DBSpider(scrapy.Spider):
     name = 'spider'
 
-    def __init__(self, shop=None, category=None, exclude_category=None, **kwargs):
+    def __init__(self, shop=None, category=None, exclude_category=None, save=True, **kwargs):
         self.item = TemporaryItem
         self.item_loader = SpiderItemLoader
         # Load spider params
         self.category = category
         self.exclude_category = exclude_category
+        self.save = save
         # Load needed shop data
         self.shop = Shop.objects.get(code=shop)
         self.shop_availabilities = self.shop.get_shop_availabilities()

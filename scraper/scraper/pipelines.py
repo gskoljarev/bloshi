@@ -20,11 +20,12 @@ class ScraperPipeline(object):
         return item
 
     def close_spider(self, spider):
-        print ">>> ", "Clear existing temporary items in db..."
-        TemporaryItem.objects.all().delete()
-        print ">>> ", "Saving temporary items to db..."
-        TemporaryItem.create_in_bulk(self.itemset)
-        print ">>> ", "Temporary items saved in db..."
-        print ">>> ", "Saving article data..."
-        update_article_data(spider.shop)
-        print ">>> ", "Article data saved!"
+        if spider.save == True:
+            print ">>> ", "Clear existing temporary items in db..."
+            TemporaryItem.objects.all().delete()
+            print ">>> ", "Saving temporary items to db..."
+            TemporaryItem.create_in_bulk(self.itemset)
+            print ">>> ", "Temporary items saved in db..."
+            print ">>> ", "Saving article data..."
+            update_article_data(spider.shop)
+            print ">>> ", "Article data saved!"
