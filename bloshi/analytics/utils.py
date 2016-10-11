@@ -21,7 +21,9 @@ def update_article_data(shop):
             article = articles.get(
                 shop_code=item.shop_code, shop_category=item.shop_category
             )
-            if item.shop_availability in shop_availabilities.values_list("keyword", flat=True):
+            if item.shop_availability == '':
+                article.shop_availability = shop_availabilities.get(availability__code=30)
+            elif item.shop_availability in shop_availabilities.values_list("keyword", flat=True):
                 article.shop_availability = shop_availabilities.get(keyword=item.shop_availability)
             else:
                 article.shop_availability = shop_availabilities.get(availability__code=40)
