@@ -54,7 +54,7 @@ class ArticleAdmin(admin.ModelAdmin):
         'shop_code',
         'shop_category',
         'shop_title',
-        'colored_shop_availability',
+        'shop_availability',
         'shop_price',
         'is_followed',
         'is_listed',
@@ -107,15 +107,6 @@ class ArticleAdmin(admin.ModelAdmin):
             url=obj.shop_url,
         )
     show_url.short_description = "URL"
-
-    def colored_shop_availability(self, obj):
-        if obj.shop_availability.availability.code == 10:
-            return format_html(
-                '<span style="color: #{};">{}</span>',
-                "009900",
-                obj.shop_availability,
-            )
-        return obj.shop_availability
 
 
 admin.site.register(Category, CategoryAdmin)

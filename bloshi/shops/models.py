@@ -6,6 +6,7 @@ from django.db import models
 from django.template.defaultfilters import truncatechars
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext as _
+
 from mptt.models import MPTTModel, TreeForeignKey
 
 
