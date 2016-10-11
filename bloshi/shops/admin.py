@@ -17,8 +17,25 @@ from .models import (
 )
 
 
+class CategoryAdmin(MPTTModelAdmin):
+    list_display = ['id', 'code', 'name']
+
+
+class AvailabilityAdmin(admin.ModelAdmin):
+    list_display = ['id', 'code', 'name']
+
+
+class ShopCategoryInline(admin.TabularInline):
+    model = ShopCategory
+
+
+class ShopAvailabilityInline(admin.TabularInline):
+    model = ShopAvailability
+
+
 class ShopAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'code', 'url']
+    inlines = (ShopCategoryInline, ShopAvailabilityInline,)
 
 
 class ShopCategoryAdmin(admin.ModelAdmin):
@@ -51,20 +68,37 @@ class ArticleAdmin(admin.ModelAdmin):
         'shop_availability__shop__name',
     )
     search_fields = ['id', 'shop_title', 'shop_category__category__code']
-    actions = ['set_followed', 'set_listed']
+    actions = [
+        'set_followed',
+        'set_listed_followed',
+        'set_unlisted',
+        'set_unfollowed',
+    ]
 
 
-    def set_listed(self, request, queryset):
+    def set_listed_followed(self, request, queryset):
         for article in queryset:
             article.is_listed = article.is_followed = True
             article.save()
-    set_listed.short_description = "Mark selected articles as listed and followed"
+    set_listed_followed.short_description = "Mark selected articles as listed and followed"
 
     def set_followed(self, request, queryset):
         for article in queryset:
             article.is_followed = True
             article.save()
     set_followed.short_description = "Mark selected articles as followed"
+
+    def set_unlisted(self, request, queryset):
+        for article in queryset:
+            article.is_listed = False
+            article.save()
+    set_unlisted.short_description = "Mark selected articles as unlisted"
+
+    def set_unfollowed(self, request, queryset):
+        for article in queryset:
+            article.is_followed = False
+            article.save()
+    set_unfollowed.short_description = "Mark selected articles as unfollowed"
 
     # Clickable URLs
     def show_url(self, obj):
@@ -75,8 +109,8 @@ class ArticleAdmin(admin.ModelAdmin):
     show_url.short_description = "URL"
 
 
-admin.site.register(Category, MPTTModelAdmin)
-admin.site.register(Availability)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Availability, AvailabilityAdmin)
 admin.site.register(Shop, ShopAdmin)
 admin.site.register(ShopCategory, ShopCategoryAdmin)
 admin.site.register(ShopAvailability, ShopAvailabilityAdmin)
