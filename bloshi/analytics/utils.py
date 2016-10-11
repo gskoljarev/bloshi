@@ -8,12 +8,17 @@ from scraping.models import TemporaryItem
 
 
 def update_article_data(shop):
-    articles = Article.objects.all()
-    temp_items = TemporaryItem.objects.all()
+    articles = Article.objects.filter(
+        shop_category__shop=shop
+    )
+    temp_items = TemporaryItem.objects.filter(
+        shop_category__shop=shop
+    )
     shop_availabilities = shop.get_shop_availabilities()
 
     articles_to_update = []
     articles_to_create = []
+    articles_to_set_removed = []
 
     for item in temp_items:
         # Update existing Article instance or create a new one
@@ -26,7 +31,7 @@ def update_article_data(shop):
             elif item.shop_availability in shop_availabilities.values_list("keyword", flat=True):
                 article.shop_availability = shop_availabilities.get(keyword=item.shop_availability)
             else:
-                article.shop_availability = shop_availabilities.get(availability__code=40)
+                article.shop_availability = shop_availabilities.get(availability__code=30)
 
             article.shop_title = item.shop_title
             article.shop_url = item.shop_url
@@ -34,10 +39,13 @@ def update_article_data(shop):
 
             articles_to_update.append(article)
         except:
-            if item.shop_availability in shop_availabilities.values_list("keyword", flat=True):
+            if item.shop_availability == '':
+                shop_availability = shop_availabilities.get(availability__code=30)
+            elif item.shop_availability in shop_availabilities.values_list("keyword", flat=True):
                 shop_availability = shop_availabilities.get(keyword=item.shop_availability)
             else:
-                shop_availability = shop_availabilities.get(availability__code=40)
+                shop_availability = shop_availabilities.get(availability__code=30)
+
             article = Article(
                 shop_code=item.shop_code,
                 shop_category=item.shop_category,
@@ -48,10 +56,22 @@ def update_article_data(shop):
             )
             articles_to_create.append(article)
 
+    for article in articles:
+        # Set Articles not in TemporaryItems as removed (40)
+        try:
+            item = temp_items.get(shop_code=article.shop_code, shop_category=article.shop_category)
+        except:
+            shop_availability = shop_availabilities.get(availability__code=40)
+            article.shop_availability = shop_availability
+
+            articles_to_set_removed.append(article)
+
     # Bulk updates & creations
-    print ">>> ", "Updating articles (%s)..." % len(articles_to_update)
+    print ">>> >>> ", "Updating articles (%s)..." % len(articles_to_update)
     Article.update_in_bulk(articles_to_update)
-    print ">>> ", "Creating new articles (%s)..." % len(articles_to_create)
+    print ">>> >>> ", "Setting articles as removed (%s)..."  % len(articles_to_set_removed)
+    Article.update_in_bulk(articles_to_set_removed)
+    print ">>> >>> ", "Creating new articles (%s)..." % len(articles_to_create)
     Article.create_in_bulk(articles_to_create)
 
 
