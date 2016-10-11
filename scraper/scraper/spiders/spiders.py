@@ -83,13 +83,14 @@ class DBSpider(scrapy.Spider):
             yield request
 
         # Go to next page
-        next_page = response.xpath(str(self.db_spider.next_page_xpath))
-        if next_page:
-            url = response.urljoin(next_page[0].extract())
-            yield scrapy.Request(
-                url=url,
-                callback=self.parse,
-                meta={
-                    'shop_category': response.meta['shop_category']
-                }
-            )
+        if self.db_spider.next_page_xpath:
+            next_page = response.xpath(str(self.db_spider.next_page_xpath))
+            if next_page:
+                url = response.urljoin(next_page[0].extract())
+                yield scrapy.Request(
+                    url=url,
+                    callback=self.parse,
+                    meta={
+                        'shop_category': response.meta['shop_category']
+                    }
+                )
