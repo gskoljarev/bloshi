@@ -27,5 +27,21 @@ class SpiderAdmin(admin.ModelAdmin):
         },
     }
 
+
+class TemporaryItemAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'shop',
+        'shop_code',
+        'shop_category',
+        'shop_title',
+        'shop_availability',
+        'shop_price',
+    ]
+    list_filter = (
+        'shop_category__category__code',
+        'shop_availability',
+    )
+
 admin.site.register(Spider, SpiderAdmin)
-admin.site.register(TemporaryItem)
+admin.site.register(TemporaryItem, TemporaryItemAdmin)

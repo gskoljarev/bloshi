@@ -34,11 +34,11 @@ class DBSpider(scrapy.Spider):
 
         shop_categories = self.shop.get_shop_categories()
         if self.exclude_category:
-            shop_categories = shop_categories.exclude(category__code=self.exclude_category)
+            self.shop_categories = shop_categories.exclude(category__code=self.exclude_category)
         if self.category:
-            shop_categories = shop_categories.filter(category__code=self.category)
+            self.shop_categories = shop_categories.filter(category__code=self.category)
 
-        for shop_category in shop_categories:
+        for shop_category in self.shop_categories:
             yield scrapy.Request(
                 url=shop_category.url,
                 dont_filter=True,
