@@ -10,7 +10,7 @@ from scraping.models import TemporaryItem
 def update_article_data(shop, shop_categories=[]):
     if shop_categories:
         articles = Article.objects.filter(shop_category__in=shop_categories)
-        temp_items = TemporaryItem.objects.filter(shop_category=shop_categories)
+        temp_items = TemporaryItem.objects.filter(shop_category__in=shop_categories)
     else:
         articles = Article.objects.filter(shop_category__shop=shop)
         temp_items = TemporaryItem.objects.filter(shop_category__shop=shop)
@@ -36,14 +36,13 @@ def update_article_data(shop, shop_categories=[]):
         article_list = articles.filter(shop_code=item.shop_code, shop_category=item.shop_category)
 
         # Too many Articles for update
-        if len(article_list) >= 2:
+        if article_list.count() >= 2:
             print ">>> !!! ", "Too many (%s) articles found for shop code %s in shop category %s..." % (
-                len(article_list), item.shop_code, item.shop_category
+                article_list.count(), item.shop_code, item.shop_category
             )
-            articles = articles.exclude(id__in=article_list.values_list("id", flat=True))
 
         # No Articles found, create a new one
-        elif len(article_list) == 0:
+        elif article_list.count() == 0:
             article = Article(
                 shop_code=item.shop_code,
                 shop_category=item.shop_category,
@@ -53,7 +52,6 @@ def update_article_data(shop, shop_categories=[]):
                 shop_price=item.shop_price
             )
             articles_to_create.append(article)
-            articles = articles.exclude(shop_code=item.shop_code, shop_category=item.shop_category)
 
         # Update existing Article
         else:
@@ -65,14 +63,14 @@ def update_article_data(shop, shop_categories=[]):
             article.shop_price = item.shop_price
 
             articles_to_update.append(article)
-            articles = articles.exclude(shop_code=item.shop_code, shop_category=item.shop_category)
 
     # Set remaining Articles as removed
     shop_availability = shop_availabilities.get(availability__code=40)
+    temp_item_shop_codes = temp_items.values_list("shop_code", flat=True)
     for article in articles:
-        article.shop_availability = shop_availability
-
-        articles_to_set_removed.append(article)
+        if article.shop_code not in temp_item_shop_codes:
+            article.shop_availability = shop_availability
+            articles_to_set_removed.append(article)
 
     # Bulk updates & creations
     print ">>> >>> ", "Updating articles (%s)..." % len(articles_to_update)

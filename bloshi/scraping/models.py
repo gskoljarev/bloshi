@@ -24,6 +24,7 @@ class Spider(models.Model):
     initial_request_url = models.URLField(_('Initial request URL'), blank=True)
 
     next_page_xpath = models.TextField(_('Next page XPath'), blank=True)
+    next_page_is_calc = models.BooleanField(_('Is next page calculated manually?'), default=False)
     selector_xpath = models.TextField(_('Selector XPath'), blank=True)
 
     shop_code_type = models.IntegerField(choices=TYPE, default=TYPE.list)

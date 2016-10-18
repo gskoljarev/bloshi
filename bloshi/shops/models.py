@@ -130,8 +130,8 @@ class Article(models.Model):
         from bulk_update.helper import bulk_update
         bulk_update(
             articles,
-            # exclude_fields=['id', 'shop_code', 'shop_category'],
-            batch_size=999
+            exclude_fields=['id', 'shop_code', 'shop_category'],
+            batch_size=45  # Theoretical maximum for SQLite databases is 999
         )
 
     @property

@@ -32,11 +32,11 @@ class DBSpider(scrapy.Spider):
         if self.initial_request_url:
             yield scrapy.Request(url=self.initial_request_url)
 
-        shop_categories = self.shop.get_shop_categories()
+        self.shop_categories = self.shop.get_shop_categories()
         if self.exclude_category:
-            self.shop_categories = shop_categories.exclude(category__code=self.exclude_category)
+            self.shop_categories = self.shop_categories.exclude(category__code=self.exclude_category)
         if self.category:
-            self.shop_categories = shop_categories.filter(category__code=self.category)
+            self.shop_categories = self.shop_categories.filter(category__code=self.category)
 
         for shop_category in self.shop_categories:
             yield scrapy.Request(
@@ -84,9 +84,17 @@ class DBSpider(scrapy.Spider):
 
         # Go to next page
         if self.db_spider.next_page_xpath:
-            next_page = response.xpath(str(self.db_spider.next_page_xpath))
+            next_page = response.xpath(str(self.db_spider.next_page_xpath)).extract()
             if next_page:
-                url = response.urljoin(next_page[0].extract())
+                next_page= next_page[0]
+                # Manually create next page urls from page numbers
+                if self.db_spider.next_page_is_calc:
+                    next_page_num = next_page
+                    url = response.url[:-1] + next_page_num  # This line relies on URL having page param at the end (...&page=3)
+                # Full next page URL
+                else:
+                    url = response.urljoin(next_page)
+
                 yield scrapy.Request(
                     url=url,
                     callback=self.parse,
