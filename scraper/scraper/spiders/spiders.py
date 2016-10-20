@@ -85,7 +85,9 @@ class DBSpider(scrapy.Spider):
         # Go to next page
         if self.db_spider.next_page_xpath:
             next_page = response.xpath(str(self.db_spider.next_page_xpath)).extract()
-            if next_page:
+
+            # HACK AHEAD!
+            if next_page != [u''] and next_page != []:
                 next_page= next_page[0]
                 # Manually create next page urls from page numbers
                 if self.db_spider.next_page_is_calc:
