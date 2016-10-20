@@ -23,7 +23,7 @@ here = lambda *x: join(abspath(dirname(__file__)), *x)
 PROJECT_ROOT = here("..", "..")
 root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 
-# Import jJango env variables
+# Import Django env variables
 import dotenv
 dotenv.read_dotenv(os.path.join(PROJECT_ROOT, 'bloshi'))
 
@@ -46,7 +46,7 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 4
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
