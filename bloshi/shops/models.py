@@ -70,7 +70,7 @@ class ShopCategory(MPTTModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     name = models.CharField(_('Name'), max_length=50, blank=True)
-    url = models.URLField(_('URL'), blank=True)
+    url = models.URLField(_('URL'), max_length=300, blank=True)
 
     def __str__(self):
         return "%s" % self.category
