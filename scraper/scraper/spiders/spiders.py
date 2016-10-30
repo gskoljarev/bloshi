@@ -12,13 +12,14 @@ from scraping.models import Spider
 class DBSpider(scrapy.Spider):
     name = 'spider'
 
-    def __init__(self, shop=None, category=None, exclude_category=None, save=True, **kwargs):
+    def __init__(self, shop=None, category=None, exclude_category=None, save=0, save_temp=1, **kwargs):
         self.item = TemporaryItem
         self.item_loader = SpiderItemLoader
         # Load spider params
         self.category = category
         self.exclude_category = exclude_category
-        self.save = save
+        self.save = int(save)
+        self.save_temp = int(save_temp)
         # Load needed shop data
         self.shop = Shop.objects.get(code=shop)
         self.shop_availabilities = self.shop.get_shop_availabilities()
@@ -41,7 +42,7 @@ class DBSpider(scrapy.Spider):
         for shop_category in self.shop_categories:
             yield scrapy.Request(
                 url=shop_category.url,
-                dont_filter=True,
+                # dont_filter=True,
                 meta={
                     'shop_category': shop_category
                 }
